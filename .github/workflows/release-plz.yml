@@ -1,0 +1,32 @@
+name: Release
+
+# Publishes when Cargo.toml holds a version that isn't on crates.io yet, through crates.io
+# trusted publishing (no stored token), then tags and creates the GitHub release.
+# Versions are bumped in a release/X.Y.Z pull request made locally with `release-plz update`
+# (Conventional Commits → version, CHANGELOG.md, cargo-semver-checks), so main stays PR-only.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency: release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: crates-io
+    permissions:
+      contents: write
+      id-token: write # crates.io trusted publishing
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: release-plz/action@66b324fd6c72d05d2a08568492ecdd62bfb8a62b # v0.5.148
+        with:
+          command: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,22 @@
+name: Bug report
+description: Something in the client doesn't behave as documented
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Never paste your API token or proxy credentials. Redact them as `***`."
+  - type: input
+    id: version
+    attributes: { label: charted-sea crate version }
+    validations: { required: true }
+  - type: input
+    id: runtime
+    attributes: { label: Rust version and OS (e.g. 1.96, Ubuntu 24.04) }
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes: { label: What happened, and what did you expect? }
+    validations: { required: true }
+  - type: textarea
+    id: repro
+    attributes: { label: Minimal reproduction, render: rust }

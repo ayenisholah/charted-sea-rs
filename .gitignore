@@ -1,9 +1,6 @@
+/target
 .env
 .env.*
 !.env.example
-node_modules/
-dist/
-coverage/
-target/
-*.log
-.DS_Store
+/coverage
+lcov.info

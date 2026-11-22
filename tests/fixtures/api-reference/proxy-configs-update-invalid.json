@@ -1,0 +1,40 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Update Proxy Configuration: error response example (400 with invalidUrls)",
+  "request": {
+    "method": "PUT",
+    "path": "/proxy-configs",
+    "query": {},
+    "body": [
+      {
+        "scraper": "SHOPEE",
+        "proxySettings": [
+          {
+            "type": "RESIDENTIAL",
+            "urls": ["socks5://..."]
+          }
+        ]
+      }
+    ]
+  },
+  "response": {
+    "status": 400,
+    "body": [
+      {
+        "scraper": "SHOPEE",
+        "proxySettings": [
+          {
+            "type": "RESIDENTIAL",
+            "urls": ["socks5://..."],
+            "invalidUrls": [
+              {
+                "url": "socks5://...",
+                "reason": "INCOMPATIBLE"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

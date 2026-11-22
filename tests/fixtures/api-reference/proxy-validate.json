@@ -1,0 +1,132 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Validate Proxies: request and response body examples",
+  "request": {
+    "method": "POST",
+    "path": "/proxy-validate",
+    "query": {},
+    "body": [
+      "socks5://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}",
+      "socks5://uuu-zone-custom-region-${country(case=LOWER)}-session-${rand(len=9,use=[lowerCaseChar,digit])}-sessTime-10:ppp@p1.mangoproxy.com:2333"
+    ]
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "url": "socks5://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}",
+        "tests": [
+          {
+            "type": "http",
+            "success": true,
+            "ipAddress": "124.246.119.222"
+          },
+          {
+            "type": "https",
+            "success": true,
+            "ipAddress": "124.246.119.222"
+          },
+          {
+            "type": "http3",
+            "success": true,
+            "ipAddress": "124.246.119.222"
+          },
+          {
+            "type": "stun",
+            "success": true,
+            "ipAddress": "124.246.119.222"
+          },
+          {
+            "type": "tcp20443",
+            "success": false,
+            "errors": ["Error: read ECONNRESET"]
+          },
+          {
+            "type": "udp20443",
+            "success": false,
+            "errors": [
+              "Error: UDP reflect request to udp://sg1.whatismyip.chartedsea.com:20443 timed out after 10000ms."
+            ]
+          }
+        ],
+        "compatibilities": [
+          {
+            "scraper": "SHOPEE",
+            "description": "Shopee Web Scraper",
+            "compatible": true
+          },
+          {
+            "scraper": "SHOPEE_ANDROID",
+            "description": "Shopee Android Scraper",
+            "compatible": true,
+            "degradedPerformanceReason": "Unsupported protocol/port(s): TCP/20443"
+          },
+          {
+            "scraper": "LAZADA",
+            "description": "Lazada Web Scraper",
+            "compatible": true
+          }
+        ]
+      },
+      {
+        "url": "socks5://uuu-zone-custom-region-${country(case=LOWER)}-session-${rand(len=9,use=[lowerCaseChar,digit])}-sessTime-10:ppp@p1.mangoproxy.com:2333",
+        "tests": [
+          {
+            "type": "http",
+            "success": true,
+            "ipAddress": "58.182.111.127"
+          },
+          {
+            "type": "https",
+            "success": true,
+            "ipAddress": "58.182.111.127"
+          },
+          {
+            "type": "http3",
+            "success": false,
+            "errors": ["Error: Request failed: Timeout was reached"]
+          },
+          {
+            "type": "stun",
+            "success": false,
+            "errors": [
+              "Error: STUN request to sg2.whatismyip.chartedsea.com:19302 timed out after 10000ms."
+            ]
+          },
+          {
+            "type": "tcp20443",
+            "success": false,
+            "errors": ["Error: Missing response from tcp://sg1.whatismyip.chartedsea.com:20443"]
+          },
+          {
+            "type": "udp20443",
+            "success": false,
+            "errors": [
+              "Error: UDP reflect request to udp://sg1.whatismyip.chartedsea.com:20443 timed out after 10000ms."
+            ]
+          }
+        ],
+        "compatibilities": [
+          {
+            "scraper": "SHOPEE",
+            "description": "Shopee Web Scraper",
+            "compatible": false,
+            "incompatibilityReason": "Unsupported protocol/port(s): HTTP3/443",
+            "degradedPerformanceReason": "Unsupported protocol/port(s): STUN/19302"
+          },
+          {
+            "scraper": "SHOPEE_ANDROID",
+            "description": "Shopee Android Scraper",
+            "compatible": true,
+            "degradedPerformanceReason": "Unsupported protocol/port(s): TCP/20443"
+          },
+          {
+            "scraper": "LAZADA",
+            "description": "Lazada Web Scraper",
+            "compatible": true
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Update Proxy Configuration: request body example; on success the body echoes the request",
+  "request": {
+    "method": "PUT",
+    "path": "/proxy-configs",
+    "query": {},
+    "body": [
+      {
+        "scraper": "SHOPEE",
+        "proxySettings": [
+          {
+            "type": "RESIDENTIAL",
+            "urls": [
+              "socks5://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}"
+            ]
+          },
+          {
+            "country": "TW",
+            "type": "RESIDENTIAL",
+            "urls": [
+              "socks5://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}",
+              "socks5://uuu:ppp_country-${country(case=LOWER)}_session-${rand(len=8,use=[lowerCaseChar,upperCaseChar,digit])}_lifetime-15m@geo.iproyal.com:12321"
+            ]
+          }
+        ]
+      },
+      {
+        "scraper": "SHOPEE_ANDROID",
+        "proxySettings": [
+          {
+            "type": "RESIDENTIAL",
+            "urls": [
+              "http://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}",
+              "http://uuu-residential-country_${country(case=UPPER)}-r_10m-s_${rand(len=10,use=[lowerCaseChar,upperCaseChar,digit])}:ppp@gate.nstproxy.io:24125"
+            ]
+          },
+          {
+            "country": "TW",
+            "type": "RESIDENTIAL",
+            "urls": [
+              "http://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}",
+              "http://uuu-residential-country_${country(case=UPPER)}-r_10m-s_${rand(len=10,use=[lowerCaseChar,upperCaseChar,digit])}:ppp@gate.nstproxy.io:24125",
+              "http://uuu:ppp_country-${country(case=LOWER)}_session-${rand(len=8,use=[lowerCaseChar,upperCaseChar,digit])}_lifetime-15m@geo.iproyal.com:12321"
+            ]
+          }
+        ]
+      },
+      {
+        "scraper": "LAZADA",
+        "proxySettings": [
+          {
+            "type": "DATACENTER",
+            "urls": [
+              "http://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}"
+            ]
+          },
+          {
+            "type": "RESIDENTIAL",
+            "urls": [
+              "http://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "scraper": "SHOPEE",
+        "proxySettings": [
+          {
+            "type": "RESIDENTIAL",
+            "urls": [
+              "socks5://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}"
+            ]
+          },
+          {
+            "country": "TW",
+            "type": "RESIDENTIAL",
+            "urls": [
+              "socks5://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}",
+              "socks5://uuu:ppp_country-${country(case=LOWER)}_session-${rand(len=8,use=[lowerCaseChar,upperCaseChar,digit])}_lifetime-15m@geo.iproyal.com:12321"
+            ]
+          }
+        ]
+      },
+      {
+        "scraper": "SHOPEE_ANDROID",
+        "proxySettings": [
+          {
+            "type": "RESIDENTIAL",
+            "urls": [
+              "http://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}",
+              "http://uuu-residential-country_${country(case=UPPER)}-r_10m-s_${rand(len=10,use=[lowerCaseChar,upperCaseChar,digit])}:ppp@gate.nstproxy.io:24125"
+            ]
+          },
+          {
+            "country": "TW",
+            "type": "RESIDENTIAL",
+            "urls": [
+              "http://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}",
+              "http://uuu-residential-country_${country(case=UPPER)}-r_10m-s_${rand(len=10,use=[lowerCaseChar,upperCaseChar,digit])}:ppp@gate.nstproxy.io:24125",
+              "http://uuu:ppp_country-${country(case=LOWER)}_session-${rand(len=8,use=[lowerCaseChar,upperCaseChar,digit])}_lifetime-15m@geo.iproyal.com:12321"
+            ]
+          }
+        ]
+      },
+      {
+        "scraper": "LAZADA",
+        "proxySettings": [
+          {
+            "type": "DATACENTER",
+            "urls": [
+              "http://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}"
+            ]
+          },
+          {
+            "type": "RESIDENTIAL",
+            "urls": [
+              "http://uuu__cr.${country(case=LOWER)}:ppp@gw.dataimpulse.com:${rand(range=[10000,19999])}"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

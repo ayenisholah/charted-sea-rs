@@ -1,0 +1,33 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Run Scraping Tasks: scraper-specific parameters example Async response shape confirmed live on 2026-11-22.",
+  "request": {
+    "method": "POST",
+    "path": "/scraping-tasks/shopee/run",
+    "query": {
+      "waitForCompletion": "false"
+    },
+    "body": {
+      "requests": [
+        {
+          "url": "https://shopee.co.id/api/v4/search/search_items?keyword=tshirt"
+        }
+      ],
+      "productSearch_enrichUrlQuery_pageSize": 60,
+      "productSearch_crawlNextPages": true,
+      "productSearch_crawlNextPages_maxPages": 3,
+      "productSearch_crawlProductDetails": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "uuid": "1ce16c7b-26f1-4851-a281-e09f79ce2de9",
+        "url": "https://shopee.co.id/api/v4/search/search_items?keyword=tshirt",
+        "status": "PENDING",
+        "responseBody": null
+      }
+    ]
+  }
+}

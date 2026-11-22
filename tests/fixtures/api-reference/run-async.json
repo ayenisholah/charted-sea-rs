@@ -1,0 +1,102 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Run Scraping Tasks: request body example (waitForCompletion=false). Response shape confirmed against the live API on 2026-11-22 (open question 1), which also returns requestBody: null on each task.",
+  "request": {
+    "method": "POST",
+    "path": "/scraping-tasks/shopee/run",
+    "query": {
+      "autoCancelAfterSec": "1200",
+      "waitForCompletion": "false"
+    },
+    "body": {
+      "requests": [
+        {
+          "url": "https://shopee.co.id/adidas-Runfalcon-3.0-Men's-Running-Shoes---Core-Black-i.234490784.25462132870?sp_atk=67836f0a-c0c8-40d4-a0a7-bd1998943cc9&xptdk=67836f0a-c0c8-40d4-a0a7-bd1998943cc9"
+        },
+        {
+          "url": "https://shopee.co.id/SEPATU-SNEAKERS-CASUAL-ADIDS-SPEZIAL-HANDBALL-BNIB-i.197850298.20595626884?sp_atk=ff613749-9cf1-4b40-ae8e-f76dd2279ba8&xptdk=ff613749-9cf1-4b40-ae8e-f76dd2279ba8"
+        },
+        {
+          "url": "https://shopee.sg/api/v4/microsite/batch_get_item_card",
+          "method": "POST",
+          "payload": {
+            "shop_item_ids": [
+              {
+                "item_id": 40505798777,
+                "shop_id": 1521408445
+              },
+              {
+                "item_id": 40905798740,
+                "shop_id": 1521408445
+              },
+              {
+                "item_id": 42105798857,
+                "shop_id": 1521408445
+              },
+              {
+                "item_id": 43005798827,
+                "shop_id": 1521408445
+              },
+              {
+                "item_id": 27937932620,
+                "shop_id": 1521408445
+              }
+            ]
+          }
+        }
+      ],
+      "cacheMaxAgeInSec": 3600
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "uuid": "398a3b4d-241c-4297-9e81-5c4c6ecce340",
+        "url": "https://shopee.co.id/adidas-Runfalcon-3.0-Men's-Running-Shoes---Core-Black-i.234490784.25462132870?sp_atk=67836f0a-c0c8-40d4-a0a7-bd1998943cc9&xptdk=67836f0a-c0c8-40d4-a0a7-bd1998943cc9",
+        "status": "PENDING",
+        "responseBody": null,
+        "requestBody": null
+      },
+      {
+        "uuid": "785ebeaf-ae2c-4453-908b-c7dac008fbf4",
+        "url": "https://shopee.co.id/SEPATU-SNEAKERS-CASUAL-ADIDS-SPEZIAL-HANDBALL-BNIB-i.197850298.20595626884?sp_atk=ff613749-9cf1-4b40-ae8e-f76dd2279ba8&xptdk=ff613749-9cf1-4b40-ae8e-f76dd2279ba8",
+        "status": "PENDING",
+        "responseBody": null,
+        "requestBody": null
+      },
+      {
+        "uuid": "2199a83d-3ebe-442c-aa82-afd3a9903967",
+        "url": "https://shopee.sg/api/v4/microsite/batch_get_item_card",
+        "method": "POST",
+        "payload": {
+          "shop_item_ids": [
+            {
+              "item_id": 40505798777,
+              "shop_id": 1521408445
+            },
+            {
+              "item_id": 40905798740,
+              "shop_id": 1521408445
+            },
+            {
+              "item_id": 42105798857,
+              "shop_id": 1521408445
+            },
+            {
+              "item_id": 43005798827,
+              "shop_id": 1521408445
+            },
+            {
+              "item_id": 27937932620,
+              "shop_id": 1521408445
+            }
+          ]
+        },
+        "status": "PENDING",
+        "responseBody": null,
+        "requestBody": null
+      }
+    ]
+  }
+}

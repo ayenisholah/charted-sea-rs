@@ -19,7 +19,8 @@ deny:
     cargo machete
 
 cov:
-    cargo llvm-cov nextest --all-features --fail-under-lines 100 --ignore-filename-regex 'tests/|examples/'
+    cargo llvm-cov nextest --all-features --ignore-filename-regex 'tests/|examples/' --lcov --output-path lcov.info
+    scripts/check-coverage.sh lcov.info
 
 # The fixtures must match charted-sea-client's (same API examples in both test suites).
 fixtures:

@@ -1,9 +1,9 @@
 # charted-sea
 
-Async Rust client for the [Charted Sea](https://chartedsea.com) scraping API. Submit scraping tasks for Shopee and Lazada, then wait for the results or stream them as each one finishes.
+Async Rust client for the [Charted Sea](https://chartedsea.com) scraping API. Submit scraping tasks for Shopee and Lazada, then wait for the results or stream them as each one finishes. Check platform health before you spend credits, and validate proxy URLs.
 
 > **Unofficial.** Not affiliated with or endorsed by Charted Sea.
-> **Status: pre-release (0.x).** The tasks API is complete and tested against the real API. Health metrics and proxy endpoints are planned (see the [roadmap](docs/ROADMAP.md)). It isn't published to crates.io yet; install it from Git for now.
+> **Status: pre-release (0.x).** Every documented endpoint has a typed method (tasks, health metrics, proxies), tested against the API reference and the live API. It isn't published to crates.io yet; install it from Git for now. See the [roadmap](docs/ROADMAP.md).
 
 ## What it solves
 
@@ -34,6 +34,7 @@ You need Rust **1.89 or newer** and a Tokio runtime.
 |---|---|---|
 | `rustls` | yes | TLS through rustls; no OpenSSL to install |
 | `native-tls` | no | TLS through the platform library instead (`default-features = false, features = ["native-tls"]`) |
+| `tracing` | no | A `tracing` debug event per request with endpoint, status and duration; never headers or bodies |
 
 You need an API token: log in to the [Charted Sea console](https://console.chartedsea.com), then choose **Get API Token → Generate Token**. Tokens are valid for 365 days.
 
@@ -110,6 +111,50 @@ let page = tasks
     .await?;
 ```
 
+### Check platform health before a batch
+
+Shopee and Lazada sometimes block scrapers. Health metrics show recent success rates across all Charted Sea customers, so you can wait out a block instead of paying for failed tasks:
+
+```rust
+use charted_sea::{Granularity, HealthQuery, Scraper, TimeBound};
+
+let query = HealthQuery::new(TimeBound::Last1h, Granularity::Total, [Scraper::Shopee], ["SG", "ID"])
+    .known_apis(["PRODUCT_SEARCH"]);
+for m in client.health().task_metrics(&query).await?.metrics() {
+    println!("{} {:?}: {:?} ({:?})", m.country, m.known_api, m.success_rate, m.confidence);
+}
+```
+
+Ranges over 7 days, and empty scraper or country lists, are rejected before any request.
+
+### Page through every task
+
+```rust
+use charted_sea::ReadQuery;
+use futures::StreamExt;
+
+let mut all = tasks.pages(ReadQuery::new().limit(100));
+while let Some(task) = all.next().await {
+    let task = task?;
+    // …
+}
+```
+
+### Proxies
+
+```rust
+use charted_sea::{ProxyConfig, ProxySetting, ProxyUrl};
+
+// Check a template locally, with no network call.
+let url = ProxyUrl::parse("socks5://user:pass@gw.example.com:${rand(range=[10000,19999])}")?;
+println!("{url}"); // socks5://***@gw.example.com:… (Display and Debug hide credentials)
+
+let proxies = client.proxies();
+let results = proxies.validate(&[url.as_str()]).await?; // uses a little proxy traffic
+let configs = proxies.read().await?;
+proxies.update(&configs).await?; // replaces the whole configuration; never retried
+```
+
 ### Configuration
 
 ```rust
@@ -158,16 +203,18 @@ match tasks.run([TaskRequest::get(url)]).await {
 ## Examples
 
 ```sh
+CHARTED_SEA_TOKEN=... cargo run --example health_gated_batch
 CHARTED_SEA_TOKEN=... cargo run --example stream_to_jsonl -- tshirt hoodie > tasks.jsonl
 ```
 
-[`examples/stream_to_jsonl.rs`](examples/stream_to_jsonl.rs) submits search pages and writes each finished task as one JSON line.
+- [`examples/health_gated_batch.rs`](examples/health_gated_batch.rs) checks Shopee search health in Singapore and submits only if the success rate is at least 0.8 with high confidence.
+- [`examples/stream_to_jsonl.rs`](examples/stream_to_jsonl.rs) submits search pages and writes each finished task as one JSON line.
 
 ## How it's tested
 
-- **50 tests and 100% line coverage**, gated in CI.
+- **70 tests, with every library line executed**, gated in CI.
 - Every request is checked against the examples in Charted Sea's API reference. These are the same fixture files as [charted-sea-client](https://github.com/ayenisholah/charted-sea-client), and CI checks their hashes match, so the Rust and TypeScript clients can't drift apart.
-- Property tests cover backoff bounds, batching and redaction.
+- Property tests cover backoff bounds, batching, redaction and the proxy URL parser.
 - A live smoke test runs against the real API by hand (`just live`).
 
 ## Documentation

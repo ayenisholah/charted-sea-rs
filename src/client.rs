@@ -7,7 +7,9 @@ use std::time::Duration;
 use secrecy::{ExposeSecret, SecretString};
 
 use crate::error::{Error, Result};
+use crate::health::Health;
 use crate::http::retry::{Jitter, RetryPolicy};
+use crate::proxies::Proxies;
 use crate::tasks::Tasks;
 use crate::types::Scraper;
 
@@ -55,6 +57,18 @@ impl Client {
     /// The tasks API for one scraper, e.g. `client.tasks(Scraper::Shopee)` or `client.tasks("lazada")`.
     pub fn tasks(&self, scraper: impl Into<Scraper>) -> Tasks {
         Tasks::new(self.clone(), scraper.into())
+    }
+
+    /// The health-metrics API.
+    #[must_use]
+    pub fn health(&self) -> Health {
+        Health::new(self.clone())
+    }
+
+    /// The proxy-configuration API.
+    #[must_use]
+    pub fn proxies(&self) -> Proxies {
+        Proxies::new(self.clone())
     }
 }
 

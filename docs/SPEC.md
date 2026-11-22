@@ -33,21 +33,29 @@ Tasks::wait_for_results(&[Uuid], WaitOptions) -> Result<Vec<Task>>  // input ord
 Tasks::watch(&[Uuid], WaitOptions) -> BoxStream<'static, Result<Task>> // completion order
     // WaitOptions::default().poll_interval(d).max_poll_interval(d).max_wait(d)
 
+Tasks::pages(ReadQuery) -> BoxStream<'static, Result<Task>>     // every task, offset paging; no UUID twice
+
+// Health: client.health() -> Health
+Health::session_metrics(&HealthQuery) -> Result<HealthReport<SessionMetric>>
+Health::task_metrics(&HealthQuery) -> Result<HealthReport<TaskMetric>>
+    // HealthQuery::new(TimeBound::{Last1h|Last24h|Last72h|At(t)}, Granularity::{Total|Hour|Day}, scrapers, countries)
+    //     .end(t).known_apis(..)       — checked locally: 7-day range, start < end, non-empty lists
+    // HealthReport::metrics() iterates every row across periods
+
+// Proxies: client.proxies() -> Proxies
+Proxies::validate(&[impl AsRef<str>]) -> Result<Vec<ProxyValidation>>   // retried like a read
+Proxies::read() -> Result<Vec<ProxyConfig>>
+Proxies::update(&[ProxyConfig]) -> Result<Vec<ProxyConfig>>             // never retried; 400 → Validation with invalidUrls in details
+ProxyUrl::parse(&str) -> Result<ProxyUrl, PlaceholderError>            // ${rand(..)} / ${country(..)} checked locally
+
 redact(&str, &[&str]) -> String                            // the redaction the crate uses, for your own logs
 ```
 
 Re-exported for convenience: `Uuid` (uuid), `OffsetDateTime` (time).
 
-### Planned (M2)
+### Features
 
-```rust
-Tasks::pages(ReadQuery) -> impl Stream<Item = Result<Task>>          // offset paging, like tasks.iterate in TypeScript
-client.health().session_metrics(HealthQuery) / .task_metrics(HealthQuery)
-client.proxies().validate(&[ProxyUrl]) / .read() / .update(Vec<ProxyConfig>)
-ProxyUrl::parse(&str) -> Result<ProxyUrl, PlaceholderError>         // ${rand(..)} / ${country(..)} checked locally
-```
-
-Plus a `tracing` feature (spans per request with endpoint and status, never headers or bodies).
+`rustls` (default), `native-tls`, and `tracing`: one debug event per request with endpoint, status and duration, never headers or bodies.
 
 ## Types
 
@@ -56,6 +64,10 @@ Plus a `tracing` feature (spans per request with endpoint and status, never head
 - `TaskRequest`: `TaskRequest::get(url)` or `TaskRequest::post(url, payload)`.
 - `Task` (`#[non_exhaustive]`): `uuid: Option<Uuid>`, `url`, `method: Option<String>`, `payload: Option<Value>`, `status`, `response_body: Option<String>`, `error_message: Option<String>`, and `extra: Map<String, Value>` (`#[serde(flatten)]`). Unknown fields are kept, e.g. the live API's `requestBody`.
 - `TaskCount { country, status, count }` and `CancelResponse { uuids, countries }`, both `#[non_exhaustive]`.
+- Health rows (`SessionMetric`, `TaskMetric`) keep scraper, country, device, known API and confidence as strings, and rates and durations as `Option<f64>` (the API sends `null` without data). Unknown fields go into `extra`.
+- `Scraper::health_name()` gives the upper-case names the health and proxy endpoints use (`SHOPEE`, `SHOPEE_ANDROID`, `LAZADA`).
+- Proxy types (`ProxyValidation`, `ProxyTest`, `ProxyCompatibility`, `ProxyConfig`, `ProxySetting`) mirror the API. `Debug` on `ProxyValidation`, `ProxySetting` and `ProxyUrl` (and `Display` on `ProxyUrl`) replaces URL userinfo with `***`.
+- `ProxyUrl::parse` follows the same rules as charted-sea-client's `checkProxyUrl`: schemes http, https, socks4, socks5, socks5h; `rand` takes `len` with `use` or `subset`, or `range=[min,max]` alone; `country` takes `case=UPPER|LOWER`. Errors give the byte offset and the reason. All 16 proxy URLs in the API reference are accepted.
 
 ## Errors
 
@@ -95,7 +107,7 @@ Task outcomes are data, never `Err` (same as [the client's ADR 0003](https://git
 
 ## Differences from the TypeScript client
 
-- `watch` returns a stream in completion order; TypeScript offers an `onProgress` callback instead.
+- `watch` returns a stream in completion order; TypeScript offers an `onProgress` callback instead. `pages` is a stream; TypeScript's `iterate` is an async generator.
 - Cancellation is by dropping the future or stream. Polling stops immediately and no request is left half-applied. There's no `AbortSignal`.
 - Builders (`Run`, `ReadQuery`, `CountQuery`, `CancelRequest`, `WaitOptions`) replace option objects.
 - Timestamps are `time::OffsetDateTime`, sent as RFC 3339.

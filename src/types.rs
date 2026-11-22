@@ -33,6 +33,20 @@ impl Scraper {
     }
 }
 
+impl Scraper {
+    /// The upper-case name the health and proxy endpoints use (`SHOPEE`, `SHOPEE_ANDROID`, `LAZADA`).
+    /// Unknown scrapers pass through unchanged.
+    #[must_use]
+    pub fn health_name(&self) -> &str {
+        match self {
+            Self::Shopee => "SHOPEE",
+            Self::ShopeeAndroid => "SHOPEE_ANDROID",
+            Self::Lazada => "LAZADA",
+            Self::Other(s) => s,
+        }
+    }
+}
+
 impl fmt::Display for Scraper {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_str())
@@ -316,6 +330,20 @@ mod tests {
                 "REPLACED"
             ]
         );
+    }
+
+    #[test]
+    fn scrapers_have_health_names() {
+        let names: Vec<_> = [
+            Scraper::Shopee,
+            Scraper::ShopeeAndroid,
+            Scraper::Lazada,
+            Scraper::Other("DARAZ".into()),
+        ]
+        .iter()
+        .map(|s| s.health_name().to_owned())
+        .collect();
+        assert_eq!(names, ["SHOPEE", "SHOPEE_ANDROID", "LAZADA", "DARAZ"]);
     }
 
     #[test]

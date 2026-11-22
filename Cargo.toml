@@ -17,6 +17,8 @@ exclude = ["/.github", "/docs", "/tests/fixtures"]
 default = ["rustls"]
 rustls = ["reqwest/rustls"]
 native-tls = ["reqwest/native-tls"]
+## `tracing` spans/events per request: endpoint, status and duration; never headers or bodies.
+tracing = ["dep:tracing"]
 
 [dependencies]
 futures = { version = "0.3.34", default-features = false, features = ["std", "async-await"] }
@@ -28,11 +30,14 @@ serde_json = "1.0.154"
 thiserror = "2.0.21"
 time = { version = "0.3.55", features = ["formatting", "parsing", "serde"] }
 tokio = { version = "1.54.1", features = ["time"] }
+tracing = { version = "0.1.44", optional = true, default-features = false, features = ["std"] }
 url = "2.5.9"
 uuid = { version = "1.29.3", features = ["serde"] }
 
 [dev-dependencies]
 proptest = "1.12.0"
+tracing = { version = "0.1.44", default-features = false, features = ["std"] }
+tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "std"] }
 reqwest = { version = "0.13.5", default-features = false }
 serde_json = "1.0.154"
 time = { version = "0.3.55", features = ["macros"] }

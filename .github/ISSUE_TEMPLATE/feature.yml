@@ -1,0 +1,12 @@
+name: Feature request
+description: Suggest an addition
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes: { label: What problem would this solve? }
+    validations: { required: true }
+  - type: textarea
+    id: api
+    attributes:
+      { label: Which Charted Sea API behaviour does it relate to? (link the docs section) }

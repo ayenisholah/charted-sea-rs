@@ -1,0 +1,30 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Cancel Scraping Tasks: request and response body examples",
+  "request": {
+    "method": "POST",
+    "path": "/scraping-tasks/shopee/cancel",
+    "query": {},
+    "body": {
+      "uuids": [
+        "2199a83d-3ebe-442c-aa82-afd3a9903967",
+        "1ce16c7b-26f1-4851-a281-e09f79ce2de9",
+        "34d3449d-b5b9-46a5-a4e0-d524d2ab3222"
+      ],
+      "countries": ["ID", "MY", "PH", "SG", "TH", "VN"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "uuids": [
+        "2199a83d-3ebe-442c-aa82-afd3a9903967",
+        "1ce16c7b-26f1-4851-a281-e09f79ce2de9",
+        "34d3449d-b5b9-46a5-a4e0-d524d2ab3222",
+        "37744b6d-35fb-47c0-9c73-e9b7feb9f089",
+        "29d6b918-745b-4029-bdba-5f6489c43146"
+      ],
+      "countries": ["ID"]
+    }
+  }
+}

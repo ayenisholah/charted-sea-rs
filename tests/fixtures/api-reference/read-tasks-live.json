@@ -1,0 +1,30 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Live API, 2026-11-22: Read Scraping Tasks returns a page object, not the documented bare array. Scraped body replaced with \"...\".",
+  "request": {
+    "method": "GET",
+    "path": "/scraping-tasks/shopee",
+    "query": {
+      "limit": "1",
+      "uuids": "27eb6795-7e90-4928-9f13-cbb753f4563c"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "url": "https://shopee.sg/api/v4/search/search_items?keyword=tshirt",
+          "status": "BLOCKED",
+          "uuid": "27eb6795-7e90-4928-9f13-cbb753f4563c",
+          "responseBody": "..."
+        }
+      ],
+      "total": 1,
+      "pageRequest": {
+        "limit": 1,
+        "offset": 0
+      }
+    }
+  }
+}

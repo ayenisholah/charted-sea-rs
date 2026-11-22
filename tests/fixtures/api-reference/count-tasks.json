@@ -1,0 +1,32 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Count Scraping Tasks: CURL example and response body example",
+  "request": {
+    "method": "GET",
+    "path": "/scraping-tasks/shopee/count",
+    "query": {
+      "statuses": "PENDING,RUNNING,BLOCKED,ERROR",
+      "minPendingAt": "2026-07-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "country": "ID",
+        "status": "BLOCKED_TOO_MANY_TIMES",
+        "count": 4846
+      },
+      {
+        "country": "ID",
+        "status": "SUCCESS",
+        "count": 452746545
+      },
+      {
+        "country": "MY",
+        "status": "SUCCESS",
+        "count": 3054565
+      }
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Get Scraping Task Metrics: URL and response body example",
+  "request": {
+    "method": "GET",
+    "path": "/health/scraping-task-metrics",
+    "query": {
+      "startAtIncl": "LAST_24H",
+      "granularity": "HOUR",
+      "scrapers": "SHOPEE",
+      "countries": "SG,ID",
+      "knownApis": "PRODUCT_SEARCH,PRODUCT_DETAIL"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "startAtIncl": "2026-06-10T00:00:00Z",
+      "endAtExcl": "2026-06-11T00:00:00Z",
+      "granularity": "HOUR",
+      "scrapers": ["SHOPEE"],
+      "countries": ["SG", "ID"],
+      "knownApis": ["PRODUCT_SEARCH", "PRODUCT_DETAIL"],
+      "periods": [
+        {
+          "startAtIncl": "2026-06-10T00:00:00Z",
+          "endAtExcl": "2026-06-10T01:00:00Z",
+          "metrics": [
+            {
+              "scraper": "SHOPEE",
+              "country": "SG",
+              "device": "DESKTOP_WEB",
+              "knownApi": "PRODUCT_SEARCH",
+              "successRate": 0.97,
+              "confidence": "HIGH",
+              "avgDurationSec": 12,
+              "p95DurationSec": 27
+            },
+            {
+              "scraper": "SHOPEE",
+              "country": "SG",
+              "device": "DESKTOP_WEB",
+              "knownApi": "PRODUCT_DETAIL",
+              "successRate": 0.94,
+              "confidence": "HIGH",
+              "avgDurationSec": 8,
+              "p95DurationSec": 19
+            },
+            {
+              "scraper": "SHOPEE",
+              "country": "ID",
+              "device": "DESKTOP_WEB",
+              "knownApi": "PRODUCT_SEARCH",
+              "successRate": 0.65,
+              "confidence": "HIGH",
+              "avgDurationSec": 18,
+              "p95DurationSec": 45
+            },
+            {
+              "scraper": "SHOPEE",
+              "country": "ID",
+              "device": "DESKTOP_WEB",
+              "knownApi": "UNKNOWN",
+              "successRate": 0.88,
+              "confidence": "LOW",
+              "avgDurationSec": 15,
+              "p95DurationSec": 38
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

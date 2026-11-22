@@ -1,0 +1,97 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Run Scraping Tasks: request body example and response (waitForCompletion=true)",
+  "request": {
+    "method": "POST",
+    "path": "/scraping-tasks/shopee/run",
+    "query": {
+      "autoCancelAfterSec": "1200",
+      "waitForCompletion": "true"
+    },
+    "body": {
+      "requests": [
+        {
+          "url": "https://shopee.co.id/adidas-Runfalcon-3.0-Men's-Running-Shoes---Core-Black-i.234490784.25462132870?sp_atk=67836f0a-c0c8-40d4-a0a7-bd1998943cc9&xptdk=67836f0a-c0c8-40d4-a0a7-bd1998943cc9"
+        },
+        {
+          "url": "https://shopee.co.id/SEPATU-SNEAKERS-CASUAL-ADIDS-SPEZIAL-HANDBALL-BNIB-i.197850298.20595626884?sp_atk=ff613749-9cf1-4b40-ae8e-f76dd2279ba8&xptdk=ff613749-9cf1-4b40-ae8e-f76dd2279ba8"
+        },
+        {
+          "url": "https://shopee.sg/api/v4/microsite/batch_get_item_card",
+          "method": "POST",
+          "payload": {
+            "shop_item_ids": [
+              {
+                "item_id": 40505798777,
+                "shop_id": 1521408445
+              },
+              {
+                "item_id": 40905798740,
+                "shop_id": 1521408445
+              },
+              {
+                "item_id": 42105798857,
+                "shop_id": 1521408445
+              },
+              {
+                "item_id": 43005798827,
+                "shop_id": 1521408445
+              },
+              {
+                "item_id": 27937932620,
+                "shop_id": 1521408445
+              }
+            ]
+          }
+        }
+      ],
+      "cacheMaxAgeInSec": 3600
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "url": "https://shopee.co.id/SEPATU-SNEAKERS-CASUAL-ADIDS-SPEZIAL-HANDBALL-BNIB-i.197850298.20595626884?sp_atk=ff613749-9cf1-4b40-ae8e-f76dd2279ba8&xptdk=ff613749-9cf1-4b40-ae8e-f76dd2279ba8",
+        "status": "SUCCESS",
+        "responseBody": "..."
+      },
+      {
+        "url": "https://shopee.co.id/adidas-Runfalcon-3.0-Men's-Running-Shoes---Core-Black-i.234490784.25462132870?sp_atk=67836f0a-c0c8-40d4-a0a7-bd1998943cc9&xptdk=67836f0a-c0c8-40d4-a0a7-bd1998943cc9",
+        "status": "ERROR_TOO_MANY_TIMES",
+        "responseBody": null,
+        "errorMessage": "... explanation ..."
+      },
+      {
+        "url": "https://shopee.sg/api/v4/microsite/batch_get_item_card",
+        "method": "POST",
+        "payload": {
+          "shop_item_ids": [
+            {
+              "item_id": 40505798777,
+              "shop_id": 1521408445
+            },
+            {
+              "item_id": 40905798740,
+              "shop_id": 1521408445
+            },
+            {
+              "item_id": 42105798857,
+              "shop_id": 1521408445
+            },
+            {
+              "item_id": 43005798827,
+              "shop_id": 1521408445
+            },
+            {
+              "item_id": 27937932620,
+              "shop_id": 1521408445
+            }
+          ]
+        },
+        "status": "BLOCKED_TOO_MANY_TIMES",
+        "responseBody": "... message from scraped platform, if any ..."
+      }
+    ]
+  }
+}

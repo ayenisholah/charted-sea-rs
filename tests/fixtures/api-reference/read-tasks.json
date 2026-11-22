@@ -1,0 +1,31 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Read Scraping Tasks: URL and response body example",
+  "request": {
+    "method": "GET",
+    "path": "/scraping-tasks/shopee",
+    "query": {
+      "limit": "20",
+      "offset": "0",
+      "uuids": "398a3b4d-241c-4297-9e81-5c4c6ecce340,785ebeaf-ae2c-4453-908b-c7dac008fbf4"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "uuid": "398a3b4d-241c-4297-9e81-5c4c6ecce340",
+        "url": "https://shopee.co.id/SEPATU-SNEAKERS-CASUAL-ADIDS-SPEZIAL-HANDBALL-BNIB-i.197850298.20595626884?sp_atk=ff613749-9cf1-4b40-ae8e-f76dd2279ba8&xptdk=ff613749-9cf1-4b40-ae8e-f76dd2279ba8",
+        "status": "SUCCESS",
+        "responseBody": "..."
+      },
+      {
+        "uuid": "785ebeaf-ae2c-4453-908b-c7dac008fbf4",
+        "url": "https://shopee.co.id/adidas-Runfalcon-3.0-Men's-Running-Shoes---Core-Black-i.234490784.25462132870?sp_atk=67836f0a-c0c8-40d4-a0a7-bd1998943cc9&xptdk=67836f0a-c0c8-40d4-a0a7-bd1998943cc9",
+        "status": "ERROR",
+        "responseBody": null,
+        "errorMessage": "... explanation ..."
+      }
+    ]
+  }
+}

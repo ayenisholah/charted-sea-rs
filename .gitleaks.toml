@@ -1,0 +1,13 @@
+# Default rules, plus an allowlist for the obviously fake tokens used in tests and CI.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Fake test and CI tokens (never real credentials)"
+regexTarget = "match"
+regexes = [
+  '''cs_(test|sentinel)_[0-9a-z_]+''',
+  '''(ci|local)-http-token-0123456789''',
+  '''http-token-0123456789''',
+  '''0123456789abcdef''',
+]

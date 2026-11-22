@@ -1,0 +1,23 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Run a Single Scraping Task: request body example and response (waitForCompletion=true)",
+  "request": {
+    "method": "POST",
+    "path": "/scraping-tasks/shopee/run-single",
+    "query": {
+      "autoCancelAfterSec": "1200",
+      "waitForCompletion": "true"
+    },
+    "body": {
+      "url": "https://shopee.co.id/adidas-Runfalcon-3.0-Men's-Running-Shoes---Core-Black-i.234490784.25462132870?sp_atk=67836f0a-c0c8-40d4-a0a7-bd1998943cc9&xptdk=67836f0a-c0c8-40d4-a0a7-bd1998943cc9"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "url": "https://shopee.co.id/SEPATU-SNEAKERS-CASUAL-ADIDS-SPEZIAL-HANDBALL-BNIB-i.197850298.20595626884?sp_atk=ff613749-9cf1-4b40-ae8e-f76dd2279ba8&xptdk=ff613749-9cf1-4b40-ae8e-f76dd2279ba8",
+      "status": "SUCCESS",
+      "responseBody": "..."
+    }
+  }
+}

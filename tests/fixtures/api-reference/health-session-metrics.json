@@ -1,0 +1,71 @@
+{
+  "$reference": "https://chartedsea.com/docs/api-reference",
+  "$source": "Get Session Preparation Metrics: URL and response body example",
+  "request": {
+    "method": "GET",
+    "path": "/health/session-metrics",
+    "query": {
+      "startAtIncl": "LAST_24H",
+      "granularity": "HOUR",
+      "scrapers": "SHOPEE",
+      "countries": "SG,ID"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "startAtIncl": "2026-06-10T00:00:00Z",
+      "endAtExcl": "2026-06-11T00:00:00Z",
+      "granularity": "HOUR",
+      "scrapers": ["SHOPEE"],
+      "countries": ["SG", "ID"],
+      "periods": [
+        {
+          "startAtIncl": "2026-06-10T00:00:00Z",
+          "endAtExcl": "2026-06-10T01:00:00Z",
+          "metrics": [
+            {
+              "scraper": "SHOPEE",
+              "country": "SG",
+              "device": "DESKTOP_WEB",
+              "preparationSuccessRate": 0.95,
+              "confidence": "HIGH",
+              "avgDurationSec": 35,
+              "p95DurationSec": 52,
+              "avgProxyBytes": 1235049,
+              "p95ProxyBytes": 8456123
+            },
+            {
+              "scraper": "SHOPEE",
+              "country": "ID",
+              "device": "DESKTOP_WEB",
+              "preparationSuccessRate": 0.72,
+              "confidence": "HIGH",
+              "avgDurationSec": 41,
+              "p95DurationSec": 68,
+              "avgProxyBytes": 1450200,
+              "p95ProxyBytes": 9234000
+            }
+          ]
+        },
+        {
+          "startAtIncl": "2026-06-10T01:00:00Z",
+          "endAtExcl": "2026-06-10T02:00:00Z",
+          "metrics": [
+            {
+              "scraper": "SHOPEE",
+              "country": "SG",
+              "device": "DESKTOP_WEB",
+              "preparationSuccessRate": 0.93,
+              "confidence": "HIGH",
+              "avgDurationSec": 34,
+              "p95DurationSec": 49,
+              "avgProxyBytes": 1198700,
+              "p95ProxyBytes": 8100500
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Architecture
 
-Built: the tasks API (M0–M1). Health, proxies and `pages` are planned (M2).
+Built: every documented endpoint (M0–M2).
 
 ```
 src/
@@ -12,8 +12,12 @@ src/
     transport.rs   one request: auth, timeout, JSON, status → Error, retries for idempotent calls
     retry.rs       RetryPolicy, full-jitter backoff, poll delay, Retry-After, Jitter PRNG (pure)
     redact.rs      token, Bearer and URL-userinfo redaction (pure)
+  health.rs        Health: session_metrics, task_metrics; HealthQuery (local range checks), report types
+  proxies/
+    mod.rs         Proxies: validate, read, update; proxy types with credential-redacting Debug
+    placeholder.rs ProxyUrl::parse: ${rand(..)} / ${country(..)} parser (pure)
   tasks/
-    mod.rs         Tasks: run, run_single (Run<T> builder + IntoFuture), read, count, cancel;
+    mod.rs         Tasks: run, run_single (Run<T> builder + IntoFuture), read, pages, count, cancel;
                    ReadQuery, CountQuery, CancelRequest
     wait.rs        watch (stream) and wait_for_results (collects watch, restores input order)
     batch.rs       UUID de-duplication and order-preserving merge (pure)
@@ -22,6 +26,8 @@ tests/
   contract.rs      every endpoint against the documented examples (FR-1, FR-2, FR-5, FR-9)
   polling.rs       watch / wait_for_results (FR-3, FR-4, FR-R1, FR-R2, NFR-7)
   errors.rs        status mapping, retries, secrets (NFR-1 to NFR-3), builder validation
+  health_proxies.rs health, proxies and pages against the documented examples (FR-1, FR-6, FR-7)
+  tracing.rs       the tracing feature records endpoint and status, never the token
   quickstart.rs    the README quick start against a mock server
   live.rs          #[ignore]d live smoke test
   fixtures/        shared with charted-sea-client (hash-checked in CI)

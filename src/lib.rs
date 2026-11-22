@@ -30,14 +30,21 @@
 
 mod client;
 mod error;
+mod health;
 mod http;
+pub mod proxies;
 mod tasks;
 mod types;
 
 pub use client::{Client, ClientBuilder, DEFAULT_BASE_URL};
 pub use error::{Error, Result};
+pub use health::{
+    Granularity, Health, HealthPeriod, HealthQuery, HealthReport, SessionMetric, TaskMetric,
+    TimeBound,
+};
 pub use http::redact::{REDACTED, redact};
 pub use http::retry::RetryPolicy;
+pub use proxies::{ProxyConfig, ProxySetting, ProxyUrl};
 pub use tasks::{CancelRequest, CountQuery, ReadQuery, Run, Tasks, UUID_BATCH_SIZE, WaitOptions};
 pub use time::OffsetDateTime;
 pub use types::{CancelResponse, Method, Scraper, Task, TaskCount, TaskRequest, TaskStatus};

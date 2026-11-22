@@ -8,8 +8,10 @@ use std::marker::PhantomData;
 use std::pin::Pin;
 use std::time::Duration;
 
+use std::collections::HashSet;
+
 use futures::StreamExt;
-use futures::stream::BoxStream;
+use futures::stream::{self, BoxStream};
 use serde::de::DeserializeOwned;
 use serde_json::{Map, Value};
 use time::OffsetDateTime;
@@ -25,6 +27,7 @@ use crate::http::transport::ApiRequest;
 use crate::types::{CancelResponse, Scraper, Task, TaskCount, TaskPage, TaskRequest, TaskStatus};
 
 const DEFAULT_AUTO_CANCEL: Duration = Duration::from_secs(600);
+const DEFAULT_PAGE_SIZE: u32 = 20;
 const SYNC_TIMEOUT_MARGIN: Duration = Duration::from_secs(30);
 const RESERVED_BODY_KEYS: [&str; 5] = ["requests", "cacheMaxAgeInSec", "url", "method", "payload"];
 
@@ -143,6 +146,28 @@ impl Tasks {
         Ok(page.into_tasks())
     }
 
+    /// Every task matching `query`, page by page (`offset` advances by `limit`, default 20),
+    /// stopping at the first short page. A task seen twice while pages shift is yielded once.
+    /// `uuids` in the query are ignored; use [`Tasks::read`] for those.
+    #[must_use = "the stream does nothing until polled"]
+    pub fn pages(&self, query: ReadQuery) -> BoxStream<'static, Result<Task>> {
+        let limit = query.limit.unwrap_or(DEFAULT_PAGE_SIZE).max(1);
+        let start = PageState {
+            tasks: self.clone(),
+            query: ReadQuery {
+                limit: Some(limit),
+                offset: Some(query.offset.unwrap_or(0)),
+                uuids: None,
+                ..query
+            },
+            seen: HashSet::new(),
+            done: false,
+        };
+        stream::unfold(start, PageState::next_page)
+            .flat_map(stream::iter)
+            .boxed()
+    }
+
     /// Counts tasks by status and country.
     pub async fn count(&self, query: CountQuery) -> Result<Vec<TaskCount>> {
         let mut params = Vec::new();
@@ -206,6 +231,38 @@ impl Tasks {
     #[must_use = "the stream does nothing until polled"]
     pub fn watch(&self, uuids: &[Uuid], options: WaitOptions) -> BoxStream<'static, Result<Task>> {
         wait::watch(self.clone(), uuids, options).boxed()
+    }
+}
+
+struct PageState {
+    tasks: Tasks,
+    query: ReadQuery,
+    seen: HashSet<Uuid>,
+    done: bool,
+}
+
+impl PageState {
+    async fn next_page(mut self) -> Option<(Vec<Result<Task>>, Self)> {
+        if self.done {
+            return None;
+        }
+        let limit = self.query.limit.unwrap_or(DEFAULT_PAGE_SIZE);
+        let page = match self.tasks.read(self.query.clone()).await {
+            Ok(page) => page,
+            Err(error) => {
+                self.done = true;
+                return Some((vec![Err(error)], self));
+            }
+        };
+        self.done = page.len() < limit as usize;
+        self.query.offset = self.query.offset.map(|o| o + limit);
+        let seen = &mut self.seen;
+        let fresh = page
+            .into_iter()
+            .filter(|t| t.uuid.is_none_or(|u| seen.insert(u)))
+            .map(Ok)
+            .collect();
+        Some((fresh, self))
     }
 }
 

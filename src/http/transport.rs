@@ -99,10 +99,17 @@ impl Inner {
     }
 
     async fn attempt(&self, req: &ApiRequest) -> Result<(u16, Value)> {
-        let (status, retry_after, text) = self
-            .exchange(req)
-            .await
-            .map_err(|e| self.transport_error(e, req))?;
+        #[cfg(feature = "tracing")]
+        let started = std::time::Instant::now();
+        let exchanged = self.exchange(req).await;
+        #[cfg(feature = "tracing")]
+        tracing::debug!(
+            endpoint = %req.endpoint(),
+            status = exchanged.as_ref().map_or(0, |(s, _, _)| *s),
+            elapsed_ms = u64::try_from(started.elapsed().as_millis()).unwrap_or(u64::MAX),
+            "charted-sea request"
+        );
+        let (status, retry_after, text) = exchanged.map_err(|e| self.transport_error(e, req))?;
         let endpoint = req.endpoint();
         if !(200..300).contains(&status) {
             return Err(self.status_error(endpoint, status, &text, retry_after));

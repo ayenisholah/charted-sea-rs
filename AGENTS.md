@@ -7,7 +7,7 @@ Unofficial async Rust client for the Charted Sea scraping API. Tokio + reqwest, 
 ```sh
 just check                               # every gate; run before opening a PR
 cargo nextest run --all-features         # tests
-cargo llvm-cov nextest --fail-under-lines 100
+just cov                                 # every library line executed (scripts/check-coverage.sh)
 just live                                # live smoke; needs CHARTED_SEA_TOKEN; never in PR CI
 ```
 
@@ -18,7 +18,7 @@ just live                                # live smoke; needs CHARTED_SEA_TOKEN; 
 | `src/http` | transport, retry, redaction |
 | `src/tasks` | task methods, `Run<T>` builder, polling stream (`wait.rs`), batching |
 | `src/types.rs` | API types; the status table is `TaskStatus::is_terminal` |
-| `src/health.rs`, `src/proxies` | planned (M2): health metrics; proxy endpoints and placeholder parser |
+| `src/health.rs`, `src/proxies` | health metrics; proxy endpoints and the `ProxyUrl` placeholder parser |
 | `tests/` | contract, polling, errors, quick start, live (`#[ignore]`) |
 | `tests/fixtures/api-reference` | shared with charted-sea-client; don't edit here (`just fixtures` checks the hash) |
 
